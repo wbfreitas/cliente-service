@@ -27,7 +27,7 @@ public class PersonController {
         return service.login(login);
 
     }
-    @PostMapping
+    @RequestMapping
     public PersonItem create(@RequestBody @Validated PersonItem item)  {
        return service.save(item);
     }
@@ -53,11 +53,9 @@ public class PersonController {
     return service.getExperts();
     }
 
-    @GetMapping
-    @RequestMapping("/health")
+    @GetMapping("/health")
     public String health() {
         return "health";
     }
-
 }
 

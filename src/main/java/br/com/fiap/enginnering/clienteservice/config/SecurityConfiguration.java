@@ -38,6 +38,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private PersonRepository repository;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**",
+            "/swagger-ui/**"
+    };
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(authenticationService).passwordEncoder(encoder());
@@ -56,7 +64,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/clientes/api/v1").permitAll()
                 .antMatchers(HttpMethod.POST, "/clientes/api/v1/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/clientes/api/v1/health").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -66,6 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(AUTH_WHITELIST);
     }
 
     @Bean
